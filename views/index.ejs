@@ -1,0 +1,64 @@
+<html>
+<head>
+  <title></title>
+  <!-- <link rel='stylesheet' href='/stylesheets/style.css' /> -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+  <script type ="text/javascript">
+  $(document). ready(function (){
+    // this triggers the connection event in our server!
+    var socket  = io.connect();
+    // we'll write all the socket stuff after the above line!
+
+    //EMIT data to the server when an event  happend -> The server will be listening for this event
+    $('#add').click(function (){
+      socket.emit( "add_button", {info:  "hey I was pushed!!!"});
+
+    });
+    //Listening  for the server Response/ Send Data and do Something
+    socket.on( 'server_response_add', function (data){
+      $("#message").html("<h3>The button has been pushed "+ data.response+ " time(s)</h3>")
+      console.log( 'The server respondes to add: ',  data.response);
+    });
+
+    //EMIT data to the server when an event  happend -> The server will be listening for this event
+    $('#reset').click(function (){
+      socket.emit( "reset_button", {info:  "hey I was pushed!!!"});
+
+    });
+    //Listening  for the server Response/ Send Data and do Something
+    socket.on( 'server_response_reset', function (data){
+      $("#message").html("<h3>The button has been pushed "+ data.response+ " time(s)</h3>")
+      console.log( 'The server respondes to add: ',  data.response);
+    });
+
+
+
+  })
+  </script>
+</head>
+<style >
+  .container {
+    width: 800px;
+    height: 400px;
+    border: 2px solid red;
+    text-align: center;
+    margin: auto;
+  }
+  button {
+    width: 200px;
+    height: 50px;
+    background: lightblue;
+    font-size: 16px;
+    font-weight: bold;
+  }
+</style>
+<body>
+  <div class="container">
+    <h1 id="message">The button has been pushed 1 time(s)</h1>
+    <h4>push the button to update the count!</h4>
+    <button id="add" type="button" name="button">Push the epic button</button>
+    <button id="reset" type="button" name="button">Reset Count</button>
+  </div>
+</body>
+</html>
